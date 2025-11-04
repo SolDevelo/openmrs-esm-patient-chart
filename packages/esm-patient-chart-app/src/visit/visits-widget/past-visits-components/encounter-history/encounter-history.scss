@@ -1,0 +1,19 @@
+@use '@carbon/layout';
+
+.loadingContainer {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workspaceContainer {
+  margin: layout.$spacing-05;
+  flex: 1;
+}

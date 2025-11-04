@@ -220,7 +220,7 @@
   "pages": [
     {
       "component": "root",
-      "routeRegex": "^patient\/.+\/chart",
+      "routeRegex": "^patient/.+/chart",
       "online": true,
       "offline": true
     }
@@ -237,6 +237,14 @@
       "component": "startVisitWorkspace",
       "title": "startVisitWorkspaceTitle",
       "type": "start-visit"
+    },
+    {
+      "name": "encounter-history-workspace",
+      "title": "encounterHistoryWorkspaceTitle",
+      "component": "encounterHistoryWorkspace",
+      "type": "encounter-history",
+      "canHide": true,
+      "width": "wider"
     }
   ]
 }

@@ -203,3 +203,8 @@ export const retrospectiveDateTimePicker = getAsyncLifecycle(
     ),
   { featureName: 'retrospective-date-time-picker', moduleName },
 );
+
+export const encounterHistoryWorkspace = getAsyncLifecycle(
+  () => import('./visit/visits-widget/past-visits-components/encounter-history/encounter-history.workspace'),
+  { featureName: 'encounter-history-workspace', moduleName },
+);

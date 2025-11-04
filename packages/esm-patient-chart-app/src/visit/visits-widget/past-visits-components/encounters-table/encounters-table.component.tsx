@@ -39,6 +39,8 @@ import {
   type EncounterType,
   ExtensionSlot,
   useFeatureFlag,
+  TimeIcon,
+  closeWorkspace,
 } from '@openmrs/esm-framework';
 import {
   type HtmlFormEntryForm,
@@ -162,6 +164,11 @@ const EncountersTable: React.FC<EncountersTableProps> = ({
     },
     [mutate, mutateCurrentVisit, patientUuid, t],
   );
+
+  const handleShowEncounterHistory = useCallback((encounterUuid: string) => {
+    closeWorkspace('encounter-history-workspace');
+    launchWorkspace('encounter-history-workspace', { encounterUuid });
+  }, []);
 
   if (isLoadingEncounterTypes || isLoading) {
     return <DataTableSkeleton role="progressbar" zebra />;
@@ -298,6 +305,13 @@ const EncountersTable: React.FC<EncountersTableProps> = ({
                                       onClick={() => handleDeleteEncounter(encounter.id, encounter.form?.display)}
                                     />
                                   )}
+                                  <OverflowMenuItem
+                                    className={styles.menuItem}
+                                    hasDivider
+                                    isDelete
+                                    itemText={t('showEncounterHistory', 'Show encounter history')}
+                                    onClick={() => handleShowEncounterHistory(encounter.id)}
+                                  />
                                 </OverflowMenu>
                               )}
                             </Layer>
@@ -362,6 +376,15 @@ const EncountersTable: React.FC<EncountersTableProps> = ({
                                     {t('deleteThisEncounter', 'Delete this encounter')}
                                   </Button>
                                 )}
+                                <Button
+                                  kind="ghost"
+                                  onClick={() => handleShowEncounterHistory(encounter.id)}
+                                  renderIcon={(props: ComponentProps<typeof EditIcon>) => (
+                                    <TimeIcon size={16} {...props} />
+                                  )}
+                                >
+                                  {t('showEncounterHistory', 'Show encounter history')}
+                                </Button>
                               </>
                             </>
                           </TableExpandedRow>
