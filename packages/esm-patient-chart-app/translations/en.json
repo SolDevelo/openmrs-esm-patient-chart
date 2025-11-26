@@ -153,6 +153,7 @@
   "selectProgramType": "Select program type",
   "selectVisitType": "Please select a visit type",
   "showEncounterHistory": "Show encounter history",
+  "encounterHistoryWorkspaceTitle": "Encounter History",
   "showVisitWithStartDateOnOrPriorTo": "Show visit with start date on or prior to:",
   "startDate": "Start date",
   "startingVisit": "Starting visit",

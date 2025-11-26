@@ -1,4 +1,5 @@
 @use '@carbon/layout';
+@use '@carbon/colors';
 
 .loadingContainer {
   display: flex;
@@ -16,4 +17,9 @@
 .workspaceContainer {
   margin: layout.$spacing-05;
   flex: 1;
+}
+
+.expandedActionRow {
+  background-color: colors.$white;
+  transition: background-color 0.2s ease-in-out;
 }
