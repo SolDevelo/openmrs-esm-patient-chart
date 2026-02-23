@@ -12,6 +12,7 @@ import {
   useOpenmrsPagination,
 } from '@openmrs/esm-framework';
 import { type Form } from '@openmrs/esm-patient-common-lib';
+import { jsonSchemaResourceName } from '../../../../constants';
 
 export interface EncountersTableProps {
   patientUuid: string;
@@ -26,6 +27,7 @@ export interface EncountersTableProps {
   setEncounterTypeToFilter?: React.Dispatch<React.SetStateAction<EncounterType>>;
   pageSize: number;
   setPageSize: React.Dispatch<React.SetStateAction<number>>;
+  isSelectable: boolean;
 }
 
 export interface MappedEncounter {
@@ -65,6 +67,21 @@ export function usePaginatedEncounters(patientUuid: string, encounterType: strin
   return useOpenmrsPagination<Encounter>(patientUuid ? url : null, pageSize);
 }
 
+export function useAllEncounters(patientUuid: string, encounterType?: string) {
+  const customRep = `custom:(uuid,display,diagnoses:(uuid,display,rank,diagnosis,certainty,voided),encounterDatetime,form:(uuid,display,name,description,encounterType,version,resources:(uuid,display,name,valueReference)),encounterType,visit,patient,obs:(uuid,concept:(uuid,display,conceptClass:(uuid,display)),display,groupMembers:(uuid,concept:(uuid,display),value:(uuid,display),display),value,obsDatetime),encounterProviders:(provider:(person)))`;
+
+  const url = new URL(makeUrl(`${restBaseUrl}/encounter`), window.location.toString());
+  url.searchParams.set('patient', patientUuid);
+  url.searchParams.set('v', customRep);
+  url.searchParams.set('order', 'desc');
+
+  if (encounterType) {
+    url.searchParams.set('encounterType', encounterType);
+  }
+
+  return useOpenmrsFetchAll<Encounter>(patientUuid ? url.toString() : null);
+}
+
 export function useEncounterTypes() {
   return useOpenmrsFetchAll<EncounterType>(`${restBaseUrl}/encountertype`, {
     immutable: true,
@@ -98,4 +115,16 @@ export function mapEncounter(encounter: Encounter): MappedEncounter {
     visitTypeUuid: encounter.visit?.visitType?.uuid,
     visitUuid: encounter.visit?.uuid,
   };
+}
+
+export function isCompletedFormEncounter(encounter: Encounter): boolean {
+  if (!encounter.form) {
+    return false;
+  }
+
+  if (!encounter.form.resources || !Array.isArray(encounter.form.resources)) {
+    return false;
+  }
+
+  return encounter.form.resources.some((resource: any) => resource.name === jsonSchemaResourceName);
 }
